@@ -1,0 +1,4 @@
+timeout 2500 'pidof swaylock || swaylock -f'
+timeout 2500 'niri msg action power-off-monitors'
+timeout 2500 'pidof swaylock && niri msg action power-off-monitors'
+before-sleep 'pidof swaylock || swaylock -f'

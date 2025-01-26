@@ -1,0 +1,100 @@
+{
+    "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    //"height": 32, // Waybar height (to be removed for auto height)
+    //"width": 3840, // Waybar width
+    "spacing": 3, // Gaps between modules (0px)
+    // Choose the order of the modules
+
+    "modules-left": ["niri/workspaces"], 
+    "modules-center": ["clock"],
+      "modules-right": ["disk", "cpu", "memory",  "tray"],
+            
+    // Modules configuration
+
+"river/mode": {
+    "format": "mode: {}"
+},
+
+"river/layout": {
+    "format": "    {}",
+     "spacing": 0
+},
+
+ "river/tags": {
+         "num-tags": 9,
+         "tag-labels": ["🌐","📁","👾","💬","📼","📷","📸"," 📜","🪶"],
+},
+
+"river/window": {
+    "format": "{}"
+},
+
+"niri/workspaces": {
+	"format": "{icon}",
+	"format-icons": {
+		// Named workspaces
+		// (you need to configure them in niri)
+		//"browser": "",
+		//"discord": "",
+		//"chat": "<b></b>",
+
+		// Icons by state
+	//	"active": "",
+		"default": ""
+	}
+},
+"niri/window": {
+	"format": "{}",
+	"rewrite": {
+		"(.*) - Mozilla Firefox": "🌎 $1",
+		"(.*) - zsh": "> [$1]"
+	}
+},
+ 
+"wlr/taskbar": {
+    "tooltip-format": "{title} | {app_id}",
+},
+    "custom/pipewire": {
+    "format": "{icon}",
+    "return-type": "json",
+    "signal": 8,
+    "interval": "once",
+    "format-icons": {
+        "mute": "󰖁",
+        "default": ["󰕿", "󰖀", "", "📢"],
+    },
+    "exec": "pw-volume status"
+},
+ 
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "A",
+            "deactivated": "D"
+        }
+    },
+    "tray": {
+        // "icon-size": 10,
+        "spacing": 4
+    },
+    "clock": {
+        "format": "  {:%a %d %b    %I:%M %p}  ",
+         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+      //  "format-alt": "{:%I:%M %p}"
+    },
+    "cpu": {
+        "format": "  CPU: {usage}%  ",
+        "spacing": 4,
+     //   "tooltip": false
+    },
+    "memory": {
+        "format": "  MEM:  {}%  "
+    },
+   "disk": {
+        "format": "   DISK:  {percentage_free}%  "
+
+    },
+    }
+}
+

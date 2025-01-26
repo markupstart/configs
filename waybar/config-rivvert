@@ -1,0 +1,80 @@
+{
+    "layer": "top", // Waybar at top layer
+    "position": "left", // Waybar position (top|bottom|left|right)
+    //"height": 32, // Waybar height (to be removed for auto height)
+    "width": 27, // Waybar width
+    //"spacing": 0, // Gaps between modules (0px)
+    // Choose the order of the modules
+
+    "modules-left": ["river/tags"], 
+    "modules-center": [],
+    "modules-right": ["tray", "custom/pipewire", "disk", "cpu", "memory", "clock"],
+            
+    // Modules configuration
+
+"river/mode": {
+    "format": "mode: {}"
+},
+
+"river/layout": {
+    "format": "{}",
+     "spacing": 0
+},
+
+ "river/tags": {
+         "num-tags": 9,
+         "tag-labels": ["🌐","📁","","💬","","📷","","📜","🪶"],
+},
+
+"river/window": {
+    "format": "{}",
+    "rotate": 90,
+},
+  
+    "custom/pipewire": {
+    "format": "{icon}",
+    "return-type": "json",
+    "signal": 8,
+    "interval": "once",
+    "format-icons": {
+        "mute": "󰖁",
+        "default": ["󰕿", "󰖀", "", "📢"],
+    },
+    "exec": "pw-volume status"
+},
+ 
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "A",
+            "deactivated": "D"
+        }
+    },
+    "tray": {
+       // "icon-size": 10,
+       // "spacing": 1
+    },
+    "clock": {
+        "format": "{:%H\n%M}",
+        //  "format": "{:%I:%M %p}",
+         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+      //  "format-alt": "{:%I:%M %p}"
+    },
+    "cpu": {
+        "format": "  CPU: {usage}%  ",
+        "spacing": 0,
+        "rotate": 90,
+     //   "tooltip": false
+    },
+    "memory": {
+        "format": "  MEM:  {}%  ",
+        "rotate": 90,
+    },
+   "disk": {
+        "format": "  DISK: {percentage_free}%  ",
+        "rotate": 90,
+
+    },
+    }
+}
+

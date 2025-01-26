@@ -1,0 +1,8 @@
+font-family = JetBrains Mono
+font-thicken = false
+font-size = 10
+window-inherit-font-size = true
+shell-integration = fish
+command = /usr/bin/fish --login --interactive
+background-opacity = 0.96
+theme = GruvboxDarkHard

@@ -1,0 +1,426 @@
+# Bars are defined as an array, so you can have more than one
+[[bar]]
+name = "DP-1"
+left = "dpl"
+right = "dpr"
+size = 27
+font = "Roboto 14"
+align = "south"
+side = "top"
+the-clock-font = "Liberation Sans 12"
+fg = "white"
+bg = "black"
+bg-alpha = 0.5
+
+[fonts]
+# Named fonts are tried first, then all other fonts are searched for missing glyphs
+# `fc-list` can be used to find fonts on your system.
+"Liberation Sans" = "/var/home/mark/.local/share/fonts/Hack/HackNerdFont-Bold.ttf"
+mono = "/usr/share/fonts/nerd-fonts/SymbolsNerdFontMono-Regular.ttf"
+symbola = "/var/home/mark/.local/share/fonts/Symbola-12.ttf"
+# Note: this font provides images for emojis, so it disregards the font color.
+emoji = "/usr/share/fonts/google-noto-color-emoji-fonts/NotoColorEmoji.ttf"
+# This font provides the '' thermometer symbols used in the example
+# temperature meter, in addition to some non-colored emojis.
+fontawesome = "/var/home/mark/.local/share/fonts/MesloLGMNerdFont-Regular.ttf"
+NerdFont = "/var/home/mark/.local/share/fonts/MesloLGMNerdFont-Regular.ttf"
+
+# Everything else is defined in its own section and addressed by name elsewhere.
+[dpl]
+type = "group"
+fg = "white"
+bg = "black"
+bg-alpha = 0.3
+items = ["pw-spk"]
+
+[time_fmt]
+# type='value' is implied if the only key is 'value'
+# Value is not format-expanded, but its contents can be set by actions (see clock below)
+value = "%a %d %b  %I:%M %p"
+
+[time]
+type = "clock"
+format = "{time_fmt}"
+
+[time-et]
+type = "clock"
+format = "%H:%M"
+timezone = "America/New_York"
+
+[time-ct]
+type = "clock"
+format = "%H:%M"
+timezone = "America/Chicago"
+
+[time-pt]
+type = "clock"
+format = "%H:%M"
+timezone = "America/Los_Angeles"
+
+[time-utc]
+type = "clock"
+format = "%H:%M:%S"
+timezone = "UTC"
+
+[date]
+type = "clock"
+format = "%A %Y-%m-%d"
+
+[clock]
+type = "text"
+format = "{time}"
+# The expression "{bar.some-value}" reads configuration items from the
+# currently rendering bar, which is useful if you want to have bars of
+# different sizes without duplicating all your items just to change one value
+font = "{bar.the-clock-font}"
+margin = "0 10"
+on-click = { "exec" = "gnome-calendar" }
+on-click-middle = { "write" = "time_fmt", "format" = "%H:%M" }
+on-click-right = { "write" = "time_fmt", "format" = "%H:%M:%S" }
+
+# A tooltip can either be a string or an item
+#tooltip = "{date}\n{time-et} Eastern\n{time-ct} Central\n{time-pt} Pacific\n{time-utc} UTC"
+
+[clock.tooltip]
+type = 'group'
+spacing = 4
+
+# The items list in a group can be expanded inline instead of referencing items by name
+[[clock.tooltip.items]]
+format ="{date}\n{time-et} Eastern\n{time-ct} Central\n{time-pt} Pacific\n{time-utc} UTC"
+
+[[clock.tooltip.items]]
+type = 'calendar'
+font = "mono 13"
+markup = true
+
+[sway-mode]
+type = "sway-mode"
+padding = "3"
+bg = "red"
+
+[mode]
+type = 'group'
+# The entire group will be hidden if condition expands to an empty string.
+condition = "{sway-mode}"
+items = ["sway-mode"]
+
+[sway-workspace]
+type = "sway-workspace"
+
+[workspaces]
+type = "focus-list"
+source = "sway-workspace"
+
+# Instead of writing "workspaces.item = 'an_item'", we can use a sub-key like this:
+# (note you can't address such sub-keys from other items)
+[workspaces.item]
+format = " {item} "
+margin = "0 1 0 1"
+padding = "0 0 5 0"
+border = "3 0 0 0"
+border-alpha = 0
+on-click = { "send" = "sway-workspace.switch", "format" = "{item}" }
+
+[workspaces.focused-item]
+format = " {item} "
+margin = "0 1 0 1"
+padding = "0 0 5 0"
+border = "3 0 0 0"
+bg = "#197d9b"
+bg-alpha = 0.8
+
+[workspaces-repr]
+type = "sway-tree"
+font = "Liberation Sans 10"
+align = "center"
+margin = "2 0 6 0"
+markup = true
+
+[workspaces-repr.pre-node]
+format = "{item.layout}["
+
+[[workspaces-repr.window]]
+format = '{item.marks}'
+
+[[workspaces-repr.window]]
+type = 'icon'
+name = '{item-icon-path}'
+fallback = '({item.appid})'
+tooltip = '{item.title}'
+border = "0 0 2 0"
+padding = "2 0"
+border-color = "#69cbad"
+border-alpha = '{item.focus}'
+on-click = { send = "item", format = "focus" }
+on-click-middle = { send = "item", format = "kill" }
+on-scroll-right = { send = "item", format = "move right" }
+on-scroll-left = { send = "item", format = "move left" }
+
+[workspaces-repr.post-node]
+format = "]"
+
+[workspaces-repr.pre-float]
+format = " + "
+
+[item-icon-path]
+type = 'switch'
+format = '{item.icon}'
+default = '{item.icon}'
+
+[item-icon-path.cases]
+Gitk = '/usr/share/icons/breeze-dark/apps/48/git-gui.svg'
+
+
+# The right side of the bar on DP-1
+[dpr]
+type = "group"
+fg = "white"
+bg = "black"
+bg-alpha = 0.3
+spacing = 15
+padding = "0 0 4 0"
+margin = "0 0 0 -10"
+items = ["tray", "clock"]
+
+[music]
+type = "mpris"
+# The mpris module can either try to auto-detect the right player to control or
+# it can take a name parameter, for example:
+# name = 'audacious'
+
+# It exposes the properties that your media player sets; try the values listed
+# at http://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata or look
+# at what shows up in 'dbus-monitor' after a track change.
+
+# The mpris module also supports actions (shown below)
+
+[playing]
+format = "{music.title}"
+# You can also interface with a specific media player here if you didn't set
+# name above: format = "{music.audacious.title}" / send = "music.audacious"
+font = "Liberation Sans 12"
+align = "center"
+on-click = { "send" = "music", "format" = "Next" }
+on-click-right = { "send" = "music", "format" = "Previous" }
+on-click-middle = { "send" = "music", "format" = "PlayPause" }
+on-click-backward = { "send" = "music", "format" = "Raise" }
+
+[players]
+type = "focus-list"
+source = 'music'
+# It is also valid to declare the source inline, like this:
+#source = { type = "mpris" }
+# Or like this:
+#[players.source]
+#type = 'mpris'
+
+[players.focused-item]
+format = ""
+# Depending on your system fonts, ⏸ and ⏵ might look better
+tooltip = "{item.player.name}: {item.title}"
+margin = "0 4 4 4"
+on-click = { "send" = "item", "format" = "Pause" }
+
+[players.item]
+format = ""
+tooltip = "{item.player.name}: {item.title}"
+margin = "0 4 4 4"
+on-click = { "send" = "item", "format" = "Play" }
+
+[pw-spk]
+type = 'focus-list'
+source = { type = 'pipewire', target = 'outputs' }
+on-click-middle = { send = "item.mute", format = "toggle" }
+on-scroll-up = { send = "item.volume", format = '+5%' }
+on-scroll-down = { send = "item.volume", format = '-5%' }
+font = "Roboto 10"
+
+# The default text of a pipewire item is its volume (including a % sign).
+[pw-spk.item]
+format = ' {item} '
+tooltip = '{item.tooltip}'
+on-click-middle = { send = "item.mute", format = "toggle" }
+on-scroll-up = { send = "item.volume", format = '+5%' }
+on-scroll-down = { send = "item.volume", format = '-5%' }
+
+# This shows one icon for each microphone-like device
+[pw-mic]
+type = 'focus-list'
+source = { type = 'pipewire', target = 'sources' }
+
+[pw-mic.item]
+format = '{mic-s}'
+tooltip = '{item.tooltip}'
+markup = true
+on-click-middle = { send = "item.mute", format = "toggle" }
+on-scroll-up = { send = "item.volume", format = '+5%' }
+on-scroll-down = { send = "item.volume", format = '-5%' }
+
+# This uses two properties of the device to switch between four icons,
+# indicating if the device is muted or if something is recording.  A lighter
+# green is used if recording a muted mic.
+[mic-s]
+type = 'switch'
+format = '{item.mute}-{item.active}'
+default = "<span color='#ff8888'></span>"
+
+[mic-s.cases]
+0-0 = ""
+0-1 = "<span color='#88ff88'></span>"
+1-0 = ""
+1-1 = "<span color='#ccffcc'></span>"
+
+[tray]
+type = "tray"
+
+# Change the background of the tray icons based on urgency
+[tray.item]
+type = 'icon'
+name = "{item.icon}"
+fallback = "  {item.title}   "
+
+font = "Inter 6"
+
+[tray.urgent]
+type = 'icon'
+name = "{item.icon}"
+fallback = "{item.title}"
+bg = "#800f"
+font = "Inter 5"
+
+[weather-cmd]
+type = "exec-json"
+command = ""
+# This script outputs lines like '{"temp": "16°", "emoji": "🌥"}'
+
+[weather]
+format = "{weather-cmd.emoji} {weather-cmd.temp}"
+markup = true
+
+[temp1]
+type = "thermal"
+#name = "Composite"
+path = ""
+poll = 20
+
+[hdd-icon]
+type = "meter"
+min = 20
+max = 50
+src = "{temp1}"
+below = "{temp1}°C"
+above = "<span color='red'>{temp1}°C</span>"
+values = ["", "", "", "", "", "", "<span color='red'></span>"]
+
+[hdd-use]
+type = "disk"
+path = "/"
+
+[hdd]
+format = "<span font='Liberation Mono'>/</span>:{hdd-use} {hdd-icon}"
+markup = true
+
+#[bat-charge]
+#type = "read-file"
+#file = ""
+#poll = 20
+#
+#[bat-full]
+#type = "read-file"
+#file = ""
+#poll = 20
+
+#[bat_icon]
+#type = "meter"
+#min = 0
+#max = "{bat-full}"
+#src = "{bat-charge}"
+#values = ["", "", "", "", ""]
+#
+#[bat]
+#format = "{bat-charge} mAh {bat_icon}"
+
+[cpu_icon]
+type = "meter"
+min = 20
+max = 60
+src = "{cpu_temp}"
+below = "{cpu_temp}°C"
+above = "{cpu_temp}°C"
+values = ["", "", "", "", "", ""]
+
+[psi-cpu-file]
+type = "read-file"
+file = "/proc/pressure/cpu"
+poll = 5
+
+[psi-io-file]
+type = "read-file"
+file = "/proc/pressure/io"
+poll = 5
+
+[psi-memory-file]
+type = "read-file"
+file = "/proc/pressure/memory"
+poll = 5
+
+[psi-cpu-10]
+type = "regex"
+text = "{psi-cpu-file}"
+regex = 'some avg10=(\S+)'
+
+[psi-io-10]
+type = "regex"
+text = "{psi-io-file}"
+regex = 'some avg10=(\S+)'
+
+[cpu]
+format = "{psi-cpu-10.1} {psi-io-10.1} {cpu_icon}"
+
+[emoji]
+format = "⏱"
+
+# Note: choosing a font explicitly is not required if the default fonts do not
+# contain the requested glyph, but it may be useful in case more than one font
+# defines it.
+font = "emoji"
+
+# Scrolling on the emoji will move it right or left (by adjusting the padding)
+padding = "0 0 0 {emoji_pad}"
+on-scroll-left = { send = "emoji_pad", format = "{=max(0,emoji_pad - 5)}" }
+on-scroll-right = { send = "emoji_pad", format = "{=min(200,emoji_pad + 5)}" }
+
+# Have a font tester as the tooltip to the emoji item
+tooltip = ['font-tester']
+# Vertical scrolling on the emoji will change the font tester
+on-scroll-up = { write = "font-tester", "format" = "-32" }
+on-scroll-down = { write = "font-tester", "format" = "+32" }
+
+[font-tester]
+type = 'font-test'
+font = "emoji"
+
+[emoji_pad]
+value = 0
+
+[clip]
+#type = 'clipboard'
+format = ""
+
+[tvl]
+type = "group"
+fg = "white"
+bg = "black"
+bg-alpha = 0.5
+spacing = 1.5
+alpha = 0.7
+items = ["emoji", "mode", "workspaces-repr", "clip"]
+
+[tvr]
+type = "group"
+fg = "white"
+bg = "black"
+bg-alpha = "0.2"
+spacing = 15
+items = ["players", "weather", "tray", "pw-spk", "pw-mic", "hdd", "cpu" ]
